@@ -77,7 +77,7 @@ class PreguntaService {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int, id)
-                .query('DELETE FROM Preguntas WHERE Id = @pId');
+                .query('delete from Preguntas where Id = @pId');
             rowsAffected = result.rowsAffected;
         } catch (error) {
             console.log(error);

@@ -15,7 +15,27 @@ app.get("/api/preguntas/:id", async (req, res) => {
   try {
     let id = req.params.id
     let eleccion = req.query.respuesta
+      let pregunta = await svcPregunta.getById(id);
+      if (pregunta != null && pregunta != undefined){
+        if(eleccion==pregunta.RespuestaCorrecta){
+          res.status(200).send("true");
+        }else{
+          res.status(200).send("false");
+        }   
+      }else{
+        res.status(404).send("ERROR. La pregunta no existe");
+      }
+      
+  } catch (error) {
+    res.send("error");
+  }
+});
 
+app.get("/api/preguntas/:id", async (req, res) => {
+  try {
+    let id = req.params.id
+    let eleccion = req.query.respuesta
+    console.log(id)
       let aux = await svcPregunta.getById(id);
       if (aux != null && eleccion != undefined){
         if(eleccion==aux.RespuestaCorrecta){
@@ -31,6 +51,13 @@ app.get("/api/preguntas/:id", async (req, res) => {
     res.send("error");
   }
 });
+
+app.delete('/api/preguntas/:id', async (req, res) => {
+  let id = req.params.id
+  console.log(req.params.id);
+  let borrar = await svcPregunta.deleteById(id);
+  res.send(borrar);
+})
 
 app.post("/api/preguntas", async (req, res) => {
   try {
