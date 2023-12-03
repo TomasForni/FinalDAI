@@ -42,7 +42,7 @@ class PreguntaService {
                 .input('pregRespuesta03', sql.VarChar, pregunta.Respuesta03)
                 .input('pregRespuesta04', sql.VarChar, pregunta.Respuesta04)
                 .input('pregRespuestaCorrecta', sql.Int, pregunta.RespuestaCorrecta)
-                .input('pregFechaCreacion', sql.DateTime, fechaCreacion)
+                .input('pregFechaCreacion', sql.DateTime, pregunta.FechaCreacion)
                 .query('INSERT INTO Preguntas(Pregunta, Respuesta01, Respuesta02, Respuesta03, Respuesta04, RespuestaCorrecta, FechaCreacion) VALUES (@pregPregunta, @pregRespuesta01, @pregRespuesta02, @pregRespuesta03, @pregRespuesta04, @pregRespuestaCorrecta, @pregFechaCreacion)');
             rowsAffected = result.rowsAffected;
         } catch (error) {

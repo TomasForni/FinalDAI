@@ -31,26 +31,6 @@ app.get("/api/preguntas/:id", async (req, res) => {
   }
 });
 
-app.get("/api/preguntas/:id", async (req, res) => {
-  try {
-    let id = req.params.id
-    let eleccion = req.query.respuesta
-    console.log(id)
-      let aux = await svcPregunta.getById(id);
-      if (aux != null && eleccion != undefined){
-        if(eleccion==aux.RespuestaCorrecta){
-          res.status(200).send("true");
-        }else{
-          res.status(200).send("false");
-        }   
-      }else{
-        res.status(404).send("ERROR. La pregunta no existe");
-      }
-      
-  } catch (error) {
-    res.send("error");
-  }
-});
 
 app.delete('/api/preguntas/:id', async (req, res) => {
   let id = req.params.id
