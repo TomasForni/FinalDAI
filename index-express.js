@@ -51,7 +51,10 @@ app.delete('/api/preguntas/:id', async (req, res) => {
 
 app.post("/api/preguntas", async (req, res) => {
   try {
-    console.log(req.body);
+    // Obtener la fecha y hora actual
+    let fechaCreacion = new Date();
+
+    // Crear la pregunta con la fecha actual
     let svc2 = new Pregunta();
     let preguntaNew = new svc2.constructor(
       req.body.Pregunta,
@@ -60,12 +63,17 @@ app.post("/api/preguntas", async (req, res) => {
       req.body.Respuesta03,
       req.body.Respuesta04,
       req.body.RespuestaCorrecta,
-      req.body.FechaCreacion
+      fechaCreacion // Establecer la fecha y hora actual aquí
     );
-    let Insert = await svcPregunta.insert(preguntaNew);
-    res.send(Insert);
+
+    // Insertar la pregunta en la base de datos
+    let insertResult = await svcPregunta.insert(preguntaNew);
+
+    // Enviar la respuesta al cliente
+    res.status(201).send("Pregunta creada exitosamente");
   } catch (error) {
-    res.send("error");
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
   }
 });
 
@@ -75,6 +83,9 @@ app.put("/api/preguntas/:id", async (req, res) => {
     let preguntaToUpdate = await svcPregunta.getById(id);
 
     if (preguntaToUpdate) {
+      // Obtener la fecha y hora actual
+      let fechaCreacion = new Date();
+
       // Actualizar propiedades solo si se proporcionan en el body
       preguntaToUpdate.Pregunta = req.body.Pregunta || preguntaToUpdate.Pregunta;
       preguntaToUpdate.Respuesta01 = req.body.Respuesta01 || preguntaToUpdate.Respuesta01;
@@ -82,14 +93,15 @@ app.put("/api/preguntas/:id", async (req, res) => {
       preguntaToUpdate.Respuesta03 = req.body.Respuesta03 || preguntaToUpdate.Respuesta03;
       preguntaToUpdate.Respuesta04 = req.body.Respuesta04 || preguntaToUpdate.Respuesta04;
       preguntaToUpdate.RespuestaCorrecta = req.body.RespuestaCorrecta || preguntaToUpdate.RespuestaCorrecta;
-      preguntaToUpdate.FechaCreacion = req.body.FechaCreacion || preguntaToUpdate.FechaCreacion;
+      preguntaToUpdate.FechaCreacion = fechaCreacion; // Actualizar la fecha y hora actual
 
-      let Update = await svcPregunta.update(preguntaToUpdate);
-      res.send(Update);
+      let updateResult = await svcPregunta.update(preguntaToUpdate);
+      res.status(200).send("Pregunta actualizada exitosamente");
     } else {
       res.status(404).send("ERROR. La pregunta no existe");
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send("Error interno del servidor");
   }
 });
